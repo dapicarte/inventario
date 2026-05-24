@@ -26,6 +26,9 @@ public class Inventario {
     private Long idProducto;
 
     @Column(nullable = false)
+    private String tituloProducto;
+
+    @Column(nullable = false)
     private Integer stockDisponible;
 
     @Column(nullable = false)
