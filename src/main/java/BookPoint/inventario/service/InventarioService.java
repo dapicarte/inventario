@@ -22,23 +22,6 @@ public class InventarioService {
     @Autowired
     private RestTemplate restTemplate;
 
-    // public Inventario crearInventario(Inventario inventario) {
-    //     String url = "http://localhost:8090/api/productos/" + inventario.getIdProducto();
-    //     ProductoDTO producto = restTemplate.getForObject(url, ProductoDTO.class);
-
-    //     if (producto != null) {
-
-    //         System.out.println("*************************");
-    //         System.out.println("Producto válido: " + producto.getTitulo());
-    //         System.out.println("*************************");
-
-    //         // inventario maneja su propio stock
-    //         inventario.setFechaActualizacion(LocalDate.now());
-
-    //         return inventarioRepository.save(inventario);
-    //     }
-    //     return null;
-    // }
     public Inventario crearInventario(Inventario inventario){
         String url = "http://localhost:8090/api/productos/" + inventario.getIdProducto();
         ProductoDTO producto = restTemplate.getForObject(url, ProductoDTO.class);
@@ -57,7 +40,6 @@ public class InventarioService {
 
             return inventarioRepository.save(inventario);
         }
-
         return null;
     }
 
