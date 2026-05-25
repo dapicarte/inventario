@@ -35,6 +35,8 @@ public class Inventario {
     private Integer stockDisponible;
 
     @Column(nullable = false)
-    private LocalDate fechaActualizacion;
-    
+    private Integer stockMinimo;
+
+    @Column(nullable = false)
+    private LocalDate fechaActualizacion;    
 }

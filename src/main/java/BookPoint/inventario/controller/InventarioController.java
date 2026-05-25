@@ -67,4 +67,13 @@ public class InventarioController {
         }
         return new ResponseEntity<>(actualizado, HttpStatus.OK);
     }
+
+    @GetMapping("/alertas")
+    public ResponseEntity<?> alertasStockMinimo() {
+        List<Inventario> alertas = inventarioService.alertasStockMinimo();
+        if (alertas.isEmpty()) {
+            return new ResponseEntity<>("No hay productos bajo stock minimo", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(alertas, HttpStatus.OK);
+    }
 }

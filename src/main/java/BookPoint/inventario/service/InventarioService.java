@@ -72,6 +72,7 @@ public class InventarioService {
         buscado.setIdBodega(inventario.getIdBodega());
         buscado.setTituloProducto(inventario.getTituloProducto());
         buscado.setStockDisponible(inventario.getStockDisponible());
+        buscado.setStockMinimo(inventario.getStockMinimo());
 
         return inventarioRepository.save(buscado);
     }
@@ -85,5 +86,9 @@ public class InventarioService {
         buscado.setStockDisponible(buscado.getStockDisponible() - cantidad);
         buscado.setFechaActualizacion(LocalDate.now());
         return inventarioRepository.save(buscado);
+    }
+
+    public List<Inventario> alertasStockMinimo() {
+        return inventarioRepository.findProductosBajoStockMinimo();
     }
 }
