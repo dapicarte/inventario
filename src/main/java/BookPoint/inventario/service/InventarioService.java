@@ -65,4 +65,15 @@ public class InventarioService {
 
         return inventarioRepository.save(buscado);
     }
+
+    public Inventario descontarStock(Long idProducto, Integer cantidad) {
+        Inventario buscado = inventarioRepository.findByIdProducto(idProducto).orElse(null);
+        if (buscado == null) return null;
+
+        if (buscado.getStockDisponible() < cantidad) return null; // no hay suficiente stock
+
+        buscado.setStockDisponible(buscado.getStockDisponible() - cantidad);
+        buscado.setFechaActualizacion(LocalDate.now());
+        return inventarioRepository.save(buscado);
+    }
 }

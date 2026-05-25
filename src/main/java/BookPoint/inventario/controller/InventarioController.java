@@ -63,4 +63,13 @@ public class InventarioController {
         }
         return new ResponseEntity<>(actualizado, HttpStatus.OK);
     }
+
+    @PutMapping("/descontar/{idProducto}/{cantidad}")
+    public ResponseEntity<?> descontarStock(@PathVariable Long idProducto, @PathVariable Integer cantidad) {
+        Inventario actualizado = inventarioService.descontarStock(idProducto, cantidad);
+        if (actualizado == null) {
+            return new ResponseEntity<>("Stock insuficiente o producto no encontrado", HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(actualizado, HttpStatus.OK);
+    }
 }
