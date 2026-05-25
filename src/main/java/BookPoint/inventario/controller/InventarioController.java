@@ -15,7 +15,7 @@ import BookPoint.inventario.model.Inventario;
 import BookPoint.inventario.service.InventarioService;
 
 @RestController
-@RequestMapping("api/inventario")
+@RequestMapping("api/v1/inventario")
 public class InventarioController {
     @Autowired
     private InventarioService inventarioService;

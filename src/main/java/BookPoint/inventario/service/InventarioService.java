@@ -23,7 +23,7 @@ public class InventarioService {
     private RestTemplate restTemplate;
 
     public Inventario crearInventario(Inventario inventario){
-        String url = "http://localhost:8090/api/productos/" + inventario.getIdProducto();
+        String url = "http://localhost:8090/api/v1/productos/" + inventario.getIdProducto();
         ProductoDTO producto = restTemplate.getForObject(url, ProductoDTO.class);
         
         if (producto != null) {
