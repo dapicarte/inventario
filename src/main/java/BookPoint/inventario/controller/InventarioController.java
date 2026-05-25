@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,5 +39,28 @@ public class InventarioController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<?> obtenerInventario(@PathVariable Long id) {
+    //     Inventario buscado = inventarioService.findById(id).orElse(null);
+    //     if (buscado == null) {
+    //         return new ResponseEntity<>("Inventario con id " + id + " no existe", HttpStatus.NOT_FOUND);
+    //     }
+    //     return new ResponseEntity<>(buscado, HttpStatus.OK);
+    // }
+    @GetMapping("/stockPorBodega/{idBodega}")
+        public ResponseEntity<?> getStockPorBodega(@PathVariable Long idBodega) {
+        Integer total = inventarioService.getStockPorBodega(idBodega);
+        return new ResponseEntity<>("Total de productos: " + total, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarInventario(@PathVariable Long id, @RequestBody Inventario inventario) {
+        Inventario actualizado = inventarioService.actualizarInventario(id, inventario);
+        if (actualizado == null) {
+            return new ResponseEntity<>("Inventario con id " + id + " no existe", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(actualizado, HttpStatus.OK);
     }
 }

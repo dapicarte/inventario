@@ -46,4 +46,23 @@ public class InventarioService {
     public List<Inventario> obtenerInventarios() {
         return inventarioRepository.findAll();
     }
+
+    public Integer getStockPorBodega(Long idBodega) {
+        List<Inventario> inventarios = inventarioRepository.findByIdBodega(idBodega);
+        return inventarios.stream()
+                .mapToInt(Inventario::getStockDisponible)
+                .sum();
+    }
+
+    public Inventario actualizarInventario(Long id, Inventario inventario) {
+        Inventario buscado = inventarioRepository.findById(id).orElse(null);
+        if (buscado == null) return null;
+
+        buscado.setIdProducto(inventario.getIdProducto());
+        buscado.setIdBodega(inventario.getIdBodega());
+        buscado.setTituloProducto(inventario.getTituloProducto());
+        buscado.setStockDisponible(inventario.getStockDisponible());
+
+        return inventarioRepository.save(buscado);
+    }
 }
