@@ -44,12 +44,12 @@ public class InventarioService {
             }
             return null;
         } catch (HttpClientErrorException.NotFound e) {
-            return null;
+            throw new RuntimeException("Producto no encontrado en Catalogo");
         } catch (Exception e) {
             System.out.println("*************************");
             System.out.println("Catalogo no disponible: " + e.getMessage());
             System.out.println("*************************");
-            return null;
+            throw new RuntimeException("Servicio de Catalogo no disponible, intente mas tarde");
         }
     }
 

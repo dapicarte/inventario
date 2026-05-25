@@ -23,12 +23,15 @@ public class InventarioController {
     private InventarioService inventarioService;
 
     @PostMapping
-    public ResponseEntity<Inventario> postInventario(@RequestBody Inventario inventario) {
+    public ResponseEntity<?> postInventario(@RequestBody Inventario inventario) {
         try {
-            return ResponseEntity.ok(inventarioService.crearInventario(inventario));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            Inventario nuevo = inventarioService.crearInventario(inventario);
+            if (nuevo == null) {
+                return new ResponseEntity<>("Producto no encontrado en Catalogo", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(nuevo, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
@@ -41,14 +44,6 @@ public class InventarioController {
         }
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<?> obtenerInventario(@PathVariable Long id) {
-    //     Inventario buscado = inventarioService.findById(id).orElse(null);
-    //     if (buscado == null) {
-    //         return new ResponseEntity<>("Inventario con id " + id + " no existe", HttpStatus.NOT_FOUND);
-    //     }
-    //     return new ResponseEntity<>(buscado, HttpStatus.OK);
-    // }
     @GetMapping("/stockPorBodega/{idBodega}")
         public ResponseEntity<?> getStockPorBodega(@PathVariable Long idBodega) {
         Integer total = inventarioService.getStockPorBodega(idBodega);
