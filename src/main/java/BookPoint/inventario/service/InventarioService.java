@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import BookPoint.inventario.model.Inventario;
@@ -23,24 +24,33 @@ public class InventarioService {
     private RestTemplate restTemplate;
 
     public Inventario crearInventario(Inventario inventario){
-        String url = "http://localhost:8090/api/v1/productos/" + inventario.getIdProducto();
-        ProductoDTO producto = restTemplate.getForObject(url, ProductoDTO.class);
-        
-        if (producto != null) {
-            Optional<Inventario> inventarioExistente = inventarioRepository.findByIdProducto(inventario.getIdProducto());
+        try{
+            String url = "http://localhost:8090/api/v1/productos/" + inventario.getIdProducto();
+            ProductoDTO producto = restTemplate.getForObject(url, ProductoDTO.class);
+            
+            if (producto != null) {
+                Optional<Inventario> inventarioExistente = inventarioRepository.findByIdProducto(inventario.getIdProducto());
 
-            if (inventarioExistente.isPresent()) {
-                Inventario inv = inventarioExistente.get();
-                inv.setStockDisponible(inv.getStockDisponible() + inventario.getStockDisponible());
-                inv.setFechaActualizacion(LocalDate.now());
-                return inventarioRepository.save(inv);
+                if (inventarioExistente.isPresent()) {
+                    Inventario inv = inventarioExistente.get();
+                    inv.setStockDisponible(inv.getStockDisponible() + inventario.getStockDisponible());
+                    inv.setFechaActualizacion(LocalDate.now());
+                    return inventarioRepository.save(inv);
+                }
+                inventario.setTituloProducto(producto.getTitulo());
+                inventario.setFechaActualizacion(LocalDate.now());
+
+                return inventarioRepository.save(inventario);
             }
-            inventario.setTituloProducto(producto.getTitulo());
-            inventario.setFechaActualizacion(LocalDate.now());
-
-            return inventarioRepository.save(inventario);
+            return null;
+        } catch (HttpClientErrorException.NotFound e) {
+            return null;
+        } catch (Exception e) {
+            System.out.println("*************************");
+            System.out.println("Catalogo no disponible: " + e.getMessage());
+            System.out.println("*************************");
+            return null;
         }
-        return null;
     }
 
     public List<Inventario> obtenerInventarios() {
